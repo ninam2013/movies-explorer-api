@@ -7,7 +7,9 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 // const ConflictError = require('../errors/ConflictError');
 
+// возвращаем информацию о пользователе
 const returnProfile = (req, res, next) => {
+  // console.log('req-controllers===', req.user._id);
   User.findOne({ _id: req.user._id })
     .then((user) => {
       if (!user) {
@@ -20,8 +22,8 @@ const returnProfile = (req, res, next) => {
 
 const updateProfile = (req, res, next) => {
   // обнавляем данные пользователя по _id
-  const { name } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name }, { runValidators: true, new: true })
+  const { name, email } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, email }, { runValidators: true, new: true })
     .then((user) => {
       if (!user) {
         return next(new NotFoundError('Пользователь не найден'));
