@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const { signUp, signIn } = require('./middlewares/validations');
 const users = require('./routes/users');
 const movies = require('./routes/movies');
 const auth = require('./middlewares/auth');
@@ -15,8 +16,8 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', { useNewUrlParser: true
 app.use(express.json());
 
 // добавляем обработчики
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', signUp, createUser);
+app.post('/signin', signIn, login);
 
 app.use('/users', auth, users);
 app.use('/movies', auth, movies);
