@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
+
 const {
   returnProfile,
   updateProfile,
@@ -8,6 +10,10 @@ const {
 router.get('/me', returnProfile);
 
 // обновляет информацию о пользователе (email и имя)
-router.patch('/me', updateProfile);
+router.patch('/me', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+  }),
+}), updateProfile);
 
 module.exports = router;
