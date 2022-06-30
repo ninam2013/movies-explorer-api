@@ -66,7 +66,6 @@ const createMovies = (req, res, next) => {
 
 const deleteMovies = (req, res, next) => {
   // находим карточку по _id
-  console.log('req.params-delete===', req.params);
   Movie.findOne({ _id: req.params._id })
     .then((movie) => {
       if (!movie) {
@@ -76,7 +75,6 @@ const deleteMovies = (req, res, next) => {
         return next(new ForbiddenError('Нет прав на удаление'));
       }
       // удаляем карточку по _id
-      console.log('req.params===', req.params);
       return Movie.findByIdAndRemove(req.params._id)
         .then((movieData) => {
           res.send({ movieData });

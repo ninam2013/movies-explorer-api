@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 // описываем схему
 const userSchema = new mongoose.Schema({
@@ -29,27 +29,26 @@ const userSchema = new mongoose.Schema({
 });
 
 // добавим метод findUserByCredentials с двумя параметрами почта и пароль
-// userSchema.statics.findUserByCredentials = function (email, password) {
-//   // попытаемся найти пользователя по почте и скрываем пароль
-//   return this.findOne({ email }).select('+password')
-//     .then((user) => {
-//       console.log('user===', user);
-//       // если не нашёлся email
-//       if (!user) {
-//         return Promise.reject(new Error('Неправильные почта или пароль'));
-//       }
-//       // если нашёлся email сравниваем пароль и хеш из базы
-//       return bcrypt.compare(password, user.password)
-//         .then((matched) => {
-//           // если при сравнении хеши разные выводим ошибку
-//           if (!matched) {
-//             return Promise.reject(new Error('Неправильные почта или пароль'));
-//           }
-//           // если совпадают хеши, возвращаем переменную user
-//           return user;
-//         });
-//     });
-// };
+userSchema.statics.findUserByCredentials = function (email, password) {
+  // попытаемся найти пользователя по почте и скрываем пароль
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      // если не нашёлся email
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      // если нашёлся email сравниваем пароль и хеш из базы
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          // если при сравнении хеши разные выводим ошибку
+          if (!matched) {
+            return Promise.reject(new Error('Неправильные почта или пароль'));
+          }
+          // если совпадают хеши, возвращаем переменную user
+          return user;
+        });
+    });
+};
 
 // создаём модель
 module.exports = mongoose.model('user', userSchema);
