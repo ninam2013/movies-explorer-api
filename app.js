@@ -7,6 +7,7 @@ const movies = require('./routes/movies');
 const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -15,7 +16,10 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', { useNewUrlParser: true
 
 app.use(express.json());
 
-// добавляем обработчики
+// подключаем логгер запросов перед всеми обработчиками
+app.use(requestLogger);
+
+// добавляем обработчики роутов
 app.post('/signup', signUp, createUser);
 app.post('/signin', signIn, login);
 
@@ -26,6 +30,9 @@ app.use('/movies', auth, movies);
 app.use('*', auth, (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
+
+// подключаем логгер ошибок после всех обработчиков
+app.use(errorLogger);
 
 // обработчики ошибок предварительной валидации (celebrate)
 app.use(errors());
