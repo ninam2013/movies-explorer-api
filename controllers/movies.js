@@ -27,7 +27,7 @@ const createMovies = (req, res, next) => {
     thumbnail,
     movieId,
   } = req.body;
-  // записываем в константу неверные значения
+  // записываем в константу неверные значения чтобы незагромождать if
   const wrongVariables = !country || !director
     || !duration || !year
     || !description || !image
