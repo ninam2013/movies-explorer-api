@@ -9,12 +9,11 @@ const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { PORT, DATABASE, DEFAULT_ALLOWED_METHODS } = require('./util/constants');
 
-const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-const { PORT = 3000 } = process.env;
 const app = express();
 // присоединяем к localhost:27017
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', { useNewUrlParser: true });
+mongoose.connect(DATABASE, { useNewUrlParser: true });
 
 app.use(express.json());
 
@@ -53,9 +52,8 @@ app.use(errors());
 // централизованная обработка ошибок
 app.use('*', (err, req, res, next) => {
   const status = err.statusCode || 500;
-  const message = err.message || 'На сервере произошла ошибка.';
+  const message = 'На сервере произошла ошибка.';
   res.status(status).send({
-    err,
     message,
   });
   next();

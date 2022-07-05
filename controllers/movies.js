@@ -27,17 +27,9 @@ const createMovies = (req, res, next) => {
     thumbnail,
     movieId,
   } = req.body;
-  // записываем в константу неверные значения чтобы незагромождать if
-  const wrongVariables = !country || !director
-    || !duration || !year
-    || !description || !image
-    || !trailerLink || !nameRU
-    || !nameEN || !thumbnail || !movieId;
-  // записываем в константу строку id пользователя
+
   const owner = req.user._id;
-  if (wrongVariables || !owner) {
-    next(new BadRequestError('Переданы некорректные данные'));
-  }
+
   // создаём карточку
   Movie.create({
     country,

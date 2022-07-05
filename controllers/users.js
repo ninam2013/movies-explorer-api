@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs');
 // импортируем модель
 const User = require('../models/user');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 // импортируем ошибки
 const BadRequestError = require('../errors/BadRequestError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
@@ -62,6 +64,9 @@ const updateProfile = (req, res, next) => {
       return res.send({ data: user });
     })
     .catch((err) => {
+      if (err.code === 11000) {
+        return next(new ConflictError('Такой пользователь есть в базе данных'));
+      }
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         return next(new BadRequestError('Переданы некорректные данные обновления пользователя или профиля'));
       }
@@ -76,7 +81,7 @@ const login = (req, res, next) => {
     .then((user) => {
       // аутентификация успешна! создадим токен. Для этого вызовем метод jwt.sign с 3 аргументами
       // 1.пайлоад 2.секретный ключ(соль) 3.время действия токена
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       // если всё хорошо возвращаем токен
       res.send({ token });
     })
