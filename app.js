@@ -10,9 +10,10 @@ const { createUser, login } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT, DATABASE, DEFAULT_ALLOWED_METHODS } = require('./util/constants');
+const { handleAllErrors } = require('./middlewares/handleAllErrors');
 
 const app = express();
-// присоединяем к localhost:27017
+
 mongoose.connect(DATABASE, { useNewUrlParser: true });
 
 app.use(express.json());
@@ -50,14 +51,7 @@ app.use(errorLogger);
 app.use(errors());
 
 // централизованная обработка ошибок
-app.use('*', (err, req, res, next) => {
-  const status = err.statusCode || 500;
-  const message = 'На сервере произошла ошибка.';
-  res.status(status).send({
-    message,
-  });
-  next();
-});
+app.use(handleAllErrors);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
