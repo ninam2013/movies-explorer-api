@@ -1,0 +1,41 @@
+{
+  "name": "movies-explorer-api",
+  "version": "0.0.1",
+  "description": "diplome",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninam2013/movies-explorer-api.git"
+  },
+  "author": "ManinEP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ninam2013/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/ninam2013/movies-explorer-api#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-winston": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.1",
+    "validator": "^13.7.0",
+    "winston": "^3.8.0"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.18"
+  }
+}
